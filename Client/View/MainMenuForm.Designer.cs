@@ -76,6 +76,8 @@
             this.Controls.Add(this.StartButton);
             this.Name = "MainMenuForm";
             this.Text = "MainMenuForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainMenuForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainMenuForm_Load);
             this.ResumeLayout(false);
 
         }

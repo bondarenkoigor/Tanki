@@ -57,5 +57,10 @@ namespace Client.View
         {
 
         }
+
+        private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

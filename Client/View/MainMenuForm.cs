@@ -24,6 +24,7 @@ namespace Client.View
         {
             var game = new GameForm(HP,Damage,Speed);
             game.Show();
+            this.Close();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
@@ -42,6 +43,16 @@ namespace Client.View
         private void QuitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void MainMenuForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MainMenuForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
         }
     }
 }

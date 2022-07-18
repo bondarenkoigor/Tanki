@@ -31,7 +31,7 @@ namespace Client.Control
             PlayerTank.Health = hp;
             PlayerTank.Damage = damage;
             PlayerTank.Speed = speed;
-
+            
 
             Task task = Task.Factory.StartNew(async () =>
             {
