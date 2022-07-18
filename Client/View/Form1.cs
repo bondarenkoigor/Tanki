@@ -15,37 +15,33 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-        Controller controller = new Controller();
         public Form1()
         {
             InitializeComponent();
+            Controller.Start();
             this.DoubleBuffered = true;
-            this.Controls.Add(new TankUserControl(this.controller.PlayerTank));
-            foreach (var player in controller.OtherPlayers) this.Controls.Add(new TankUserControl(player));
+            this.Controls.Add(new TankUserControl(Controller.PlayerTank));
+            foreach (var player in Controller.OtherPlayers) this.Controls.Add(new TankUserControl(player));
         }
-
-
-
-
-
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (Controller.PlayerTank.IsDead) return;
 
-            if (e.KeyChar == ' ') this.controller.PlayerTank.Shoot();
+            if (e.KeyChar == ' ') Controller.PlayerTank.Shoot();
 
-            if (e.KeyChar == 'w') this.controller.PlayerTank.Direction = "UP";
-            else if (e.KeyChar == 's') this.controller.PlayerTank.Direction = "DOWN";
-            else if (e.KeyChar == 'd') this.controller.PlayerTank.Direction = "RIGHT";
-            else if (e.KeyChar == 'a') this.controller.PlayerTank.Direction = "LEFT";
+            if (e.KeyChar == 'w') Controller.PlayerTank.Direction = "UP";
+            else if (e.KeyChar == 's') Controller.PlayerTank.Direction = "DOWN";
+            else if (e.KeyChar == 'd') Controller.PlayerTank.Direction = "RIGHT";
+            else if (e.KeyChar == 'a') Controller.PlayerTank.Direction = "LEFT";
             else return;
 
-            controller.PlayerTank.Move();
+            Controller.PlayerTank.Move();
         }
 
         private void Form1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            //if (e.KeyCode == Keys.Space) 
+
         }
     }
 }

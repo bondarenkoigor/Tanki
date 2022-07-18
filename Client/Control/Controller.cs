@@ -12,13 +12,13 @@ using System.Windows.Forms;
 
 namespace Client.Control
 {
-    internal class Controller
+    public static class Controller
     {
-        public TankModel PlayerTank { get; set; }
-        public List<TankModel> OtherPlayers { get; set; } = new List<TankModel>();
-        public Socket ClientSocket { get; set; }
+        public static TankModel PlayerTank { get; set; }
+        public static List<TankModel> OtherPlayers { get; set; } = new List<TankModel>();
+        public static Socket ClientSocket { get; set; }
 
-        public Controller()
+        public static void Start()
         {
             Random random = new Random();
             ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -31,7 +31,7 @@ namespace Client.Control
                 if (i != PlayerTank.PlayerNum) OtherPlayers.Add(new TankModel(i, new Point(0, 0), "UP"));
 
 
-            Task task = Task.Factory.StartNew(() =>
+            Task task = Task.Factory.StartNew(async () =>
             {
                 while (true)
                 {
@@ -39,16 +39,17 @@ namespace Client.Control
                     {
                         string json = JsonSerializer.Serialize(PlayerTank.ToJsonModel());
                         ClientSocket.Send(Encoding.UTF8.GetBytes(json));
+                        await Task.Delay(100);
                         string[] otherJsons = ReceiveString().Split('|');
                         foreach (var otherJson in otherJsons)
                         {
                             try
                             {
-                                var deserialized = JsonSerializer.Deserialize<JsonTankModel>(otherJson);
+                                var deserialized = JsonSerializer.Deserialize<JsonTankModel>(otherJson.Split('\n')[0]);
                                 var found = OtherPlayers.Find(p => p.PlayerNum == deserialized.PlayerNum);
                                 if (found != null) found.Update(deserialized);
                             }
-                            catch(Exception ex) { MessageBox.Show(ex.Message); }
+                            catch (Exception ex) { MessageBox.Show(ex.Message); }
                         }
                     }
                     catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -57,17 +58,17 @@ namespace Client.Control
             });
         }
 
-        private string ReceiveString()
+        private static string ReceiveString()
         {
             byte[] buffer = new byte[256];
-            List<byte> bytes = new List<byte>();
+            int byteCount = 0;
+            StringBuilder sb = new StringBuilder();
             do
             {
-                ClientSocket.Receive(buffer);
-                bytes.AddRange(buffer);
+                byteCount = ClientSocket.Receive(buffer);
+                sb.Append(Encoding.UTF8.GetString(buffer, 0, byteCount));
             } while (ClientSocket.Available > 0);
-
-            return Encoding.UTF8.GetString(bytes.ToArray()).Replace("\0", "");
+            return sb.ToString();
         }
     }
 }

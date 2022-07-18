@@ -52,14 +52,14 @@ namespace Server
         private string ReceiveString(Socket player)
         {
             byte[] buffer = new byte[256];
-            List<byte> bytes = new List<byte>();
+            int byteCount = 0;
+            StringBuilder sb = new StringBuilder();
             do
             {
-                player.Receive(buffer);
-                bytes.AddRange(buffer);
-            } while (player.Available > 0);
-
-            return Encoding.UTF8.GetString(bytes.ToArray()).Trim('\0');
+                byteCount = player.Receive(buffer);
+                sb.Append(Encoding.UTF8.GetString(buffer, 0, byteCount));
+            } while (socket.Available > 0);
+            return sb.ToString();
         }
     }
 }
