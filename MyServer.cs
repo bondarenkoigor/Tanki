@@ -12,7 +12,7 @@ namespace Server
     {
         public List<Socket> Players { get; set; }
         public Socket socket { get; set; }
-        public int PlayerNum { get; set; } = 3;
+        public int PlayerCount { get; set; } = 4;
 
         public MyServer()
         {
@@ -23,12 +23,25 @@ namespace Server
         public void Start()
         {
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234));
-            socket.Listen(PlayerNum);
+            socket.Listen(PlayerCount);
 
-            for (int i = 0; i < PlayerNum; i++) Players.Add(socket.Accept());
-            for (int i = 1; i <= PlayerNum; i++)
+            //for (int i = 0; i < PlayerCount; i++) Players.Add(socket.Accept());
+            //for (int i = 1; i <= PlayerCount; i++)
+            //{
+            //    Players[i - 1].Send(Encoding.UTF8.GetBytes($"{PlayerCount}|{i}"));
+            //}
+
+            for (int i = 1; i <= PlayerCount; i++)
             {
-                Players[i - 1].Send(Encoding.UTF8.GetBytes($"{PlayerNum}|{i}"));
+                Players.Add(socket.Accept());
+                if (i == 1)
+                {
+                    Players[i - 1].Send(Encoding.UTF8.GetBytes($"ENTER PLAYER COUNT|{i}"));
+                    PlayerCount = int.Parse(ReceiveString(Players[i - 1]));
+                    Players[i - 1].Send(Encoding.UTF8.GetBytes("confirmation"));
+                }
+                else
+                    Players[i - 1].Send(Encoding.UTF8.GetBytes($"{PlayerCount}|{i}"));
             }
 
             Task task = Task.Factory.StartNew(() =>

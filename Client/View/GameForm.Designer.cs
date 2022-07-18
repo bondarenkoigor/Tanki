@@ -1,6 +1,6 @@
-﻿namespace Client
+﻿namespace Client.View
 {
-    partial class Form1
+    partial class GameForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -30,7 +30,7 @@
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -38,8 +38,9 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.KeyPreview = true;
-            this.Name = "Form1";
+            this.Name = "GameForm";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.GameForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.ResumeLayout(false);

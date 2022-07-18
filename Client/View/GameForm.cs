@@ -11,17 +11,26 @@ using System.Windows.Forms;
 using Client.View.UserControls;
 using System.Windows.Input;
 
-namespace Client
+namespace Client.View
 {
-    public partial class Form1 : Form
+    public partial class GameForm : Form
     {
-        public Form1()
+        public GameForm(int hp, int damage, int speed)
         {
             InitializeComponent();
-            Controller.Start();
+            Controller.Start(hp, damage, speed);
+
+
             this.DoubleBuffered = true;
             this.Controls.Add(new TankUserControl(Controller.PlayerTank));
-            foreach (var player in Controller.OtherPlayers) this.Controls.Add(new TankUserControl(player));
+            Controller.gameStarted += (sender, e) =>
+            {
+                foreach (var player in Controller.OtherPlayers)
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        this.Controls.Add(new TankUserControl(player));
+                    }));
+            };
         }
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
@@ -40,6 +49,11 @@ namespace Client
         }
 
         private void Form1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+
+        }
+
+        private void GameForm_Load(object sender, EventArgs e)
         {
 
         }

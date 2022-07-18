@@ -35,6 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.BackgroundImage = global::Client.Properties.Resources.Tank;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Name = "TankUserControl";
             this.Size = new System.Drawing.Size(90, 90);

@@ -20,6 +20,7 @@ namespace Client.Model
         public bool IsTakingDamage { get; set; }
         public int Health { get; set; } = 1;
         public int Damage { get; set; }
+        public int Speed { get; set; }
 
 
         public TankModel(int num, Point location, string direction, int health = 1, bool isDead = false)
@@ -33,9 +34,10 @@ namespace Client.Model
              {
                  while (true)
                  {
-                     foreach (var tank in Controller.OtherPlayers)
+                     for (int i = 0; i < Controller.OtherPlayers.Count; i++)
                      {
-                         if (tank.IsShooting)
+                         var tank = Controller.OtherPlayers[i];
+                         if (tank != null && tank.IsShooting)
                          {
                              Rectangle bulletLine = new Rectangle();
                              if (tank.Direction == "UP") bulletLine = new Rectangle(tank.Location.X, 0, 3, tank.Location.Y);
@@ -117,5 +119,6 @@ namespace Client.Model
 
 
     }
-
 }
+
+
